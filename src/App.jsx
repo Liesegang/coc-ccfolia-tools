@@ -89,9 +89,9 @@ export default function App() {
   }
 
   return <div className="app-shell">
-    <header className="site-header"><a className="brand" href="./">CoC CCFOLIA TOOLS</a><span>セッションの、そのあとに。</span></header>
-    <main>
-      <section className="intro"><h1>冒険の経験を、次の成長へ。</h1><p>ココフォリアのログから成功した技能を整理して、キャラクターごとに上達チェック。</p></section>
+    <header className="site-header"><a className="brand" href="./">CoC CCFOLIA TOOLS</a></header>
+    <main className="tool-main">
+      <h1 className="visually-hidden">技能の上達チェック</h1>
       <Upload onFiles={readFiles} onSample={loadSample} busy={busy} />
       <div className="announcements" aria-live="polite">{notice ? <p className="notice"><Icon name="check" />{notice}</p> : null}{error ? <p className="error" role="alert">{error}</p> : null}</div>
       {files.length ? <div className="file-list"><div>{files.map(file => <span className="file-name" key={file.hash}><Icon name="file" />{file.name}<small>{file.rolls.length} 判定</small></span>)}</div><button className="text-button" disabled={busy} onClick={() => { if (confirmReset()) resetData(); }}>クリア</button></div> : null}
@@ -101,7 +101,7 @@ export default function App() {
         <div className="table-caption"><span>技能名を開くと成功ログを確認できます。技能値はチェック前に修正できます。</span><span>このキャラクターの未チェック: <strong>{pending.length}</strong></span></div>
         <SkillTable character={character} settings={settings} results={results} onSetting={(id, update) => setSettings(previous => ({ ...previous, [id]: { ...previous[id], ...update } }))} onCheck={checkSkills} />
         <div className="workspace-footer"><span>一括チェックは選択中のキャラクターが対象です。</span><button className="text-button" onClick={saveResults}>テキスト保存</button></div>
-      </section> : <section className="empty-state"><Icon name="dice" width="36" height="36" /><h2>{files.length ? '成功した技能が見つかりませんでした' : 'セッションの記録が、成長のきっかけに。'}</h2><p>{files.length ? '技能名と判定結果を含む CC / CCB のログに対応しています。' : 'ログを読み込むと、ここにキャラクターごとの成功技能が並びます。'}<br />{files.length ? '名前のない判定や通常の会話は集計しません。' : 'まずは「サンプルで試す」で、上達チェックを体験できます。'}</p></section>}
+      </section> : files.length ? <section className="empty-state"><h2>成功した技能が見つかりませんでした</h2><p>技能名と判定結果を含む CC / CCB のログに対応しています。<br />名前のない判定や通常の会話は集計しません。</p></section> : null}
       {unnamed ? <p className="notice">キャラクター名または技能名がない判定 {unnamed} 件は集計していません。</p> : null}
       <aside className="rules"><div><strong>上達チェックのルール</strong><p>1D100 が現在の技能値を超える、または 96 以上なら、1D10 を加算します。</p><small>同じ技能は1回だけチェック。補正・難易度・卓のルールを確認し、現在の技能値を調整してください。</small></div><div className="privacy"><Icon name="lock" /><span>ログはブラウザ内だけで処理します。<small>再読み込みすると入力と結果は消えます。</small></span></div></aside>
     </main>
